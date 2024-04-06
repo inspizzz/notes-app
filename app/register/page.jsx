@@ -69,11 +69,11 @@ export default function Register() {
 	})
 
 	return mounted ? (
-		<div className="h-full w-full">
+		<div className="bg-my_bg_image h-full w-full">
 			{
 				!user ? (
 					<div className="flex flex-col justify-center w-full h-full">
-						<form className="self-center flex flex-col gap-3" onSubmit={submit}>
+						<form className="self-center flex flex-col gap-3 px-4 py-8 bg-white rounded-xl opacity-95" onSubmit={submit}>
 
 							<h1 className="self-center font-extrabold text-2xl">Register</h1>
 
@@ -95,7 +95,7 @@ export default function Register() {
 								<input className="rounded-2xl p-2 bg-white" type="password" placeholder="12345678" value={password} onChange={(e) => {check(email, e.target.value); setPassword(e.target.value)}} />
 							</div>
 
-							<button type="submit" className="rounded-2xl p-2 bg-blue-500 text-white hover:bg-blue-600 flex justify-center">{loading ? <Spinner /> : "Register"}</button>
+							<button type="submit" className="rounded-2xl p-2 bg-notes_secondary text-white hover:bg-notes_primary flex justify-center">{loading ? <Spinner /> : "Register"}</button>
 
 						</form>
 					</div>
@@ -105,19 +105,19 @@ export default function Register() {
 			}
 		</div>
 	) : (
-		<div className="flex flex-col justify-center w-full h-full">
-			<form className="self-center flex flex-col gap-3" onSubmit={submit}>
+		<div className="bg-my_bg_image flex flex-col justify-center w-full h-full">
+			<form className="self-center flex flex-col gap-3 px-4 py-8 bg-white rounded-xl opacity-95">
 
 				<h1 className="self-center font-extrabold text-2xl flex justify-center gap-2">Loading <Spinner className="self-center"/></h1>
 
 				<div>
 					<p>your email</p>
-					<input className="rounded-2xl p-2 bg-white" type="email" disabled />
+					<Spinner className="self-center"/>
 				</div>
 				
 				<div>
 					<p>your password</p>
-					<input className="rounded-2xl p-2 bg-white" type="password" disabled />
+					<Spinner className="self-center"/>
 				</div>
 
 				<button type="submit" className="rounded-2xl p-2 bg-gray-500 text-white hover:bg-gray-600 flex justify-center" disabled>{loading ? <Spinner /> : "Login"}</button>

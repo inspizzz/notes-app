@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
 			<body className="h-screen">
 				<UserProvider>
 
-					{/* <TopBar /> */}
+					<TopBar />
 
 					<main className="h-screen w-screen">
 						{children}

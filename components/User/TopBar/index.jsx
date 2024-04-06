@@ -16,8 +16,8 @@ export function TopBar() {
 
 	return user && (
 
-		<div className="w-full absolute bottom-2 left-0 right-0 flex justify-center">
-			<div className="flex justify-between items-center w-1/3 rounded-3xl bg-black p-2">
+		<div className="w-full h-10 absolute top-0 left-0 right-0 flex justify-center">
+			<div className="w-full flex justify-between items-center bg-black p-2">
 				<div className="">
 
 				</div>
