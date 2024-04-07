@@ -11,11 +11,12 @@ export default function Register() {
 	const [ error, setError ] = useState([])
 	const [ email, setEmail ]	 = useState("")
 	const [ password, setPassword ] = useState("")
+	const [ mailingList, setMailingList ] = useState(false)
 	const [ loading, setLoading ] = useState(false)
 
 	const [ mounted, setMounted ] = useState(false)
 
-	const { register, user } = useUser()
+	const { register, user, addMailingList } = useUser()
 	const router = useRouter()
 
 	const check = (email, password) => {
@@ -37,6 +38,7 @@ export default function Register() {
 
 		return true
 	}
+		
 
 	const submit = async (e) => {
 		setLoading(true)
@@ -53,6 +55,11 @@ export default function Register() {
 			// set loading to false
 			setLoading(false)
 			
+			// check if the user wants to be added to the mailing list
+			if (mailingList) {
+				await addMailingList(email)
+			}
+
 			// redirect to home page
 			router.push("/")
 		} else {
@@ -93,6 +100,11 @@ export default function Register() {
 							<div>
 								<p>your password</p>
 								<input className="rounded-2xl p-2 bg-white" type="password" placeholder="12345678" value={password} onChange={(e) => {check(email, e.target.value); setPassword(e.target.value)}} />
+							</div>
+							
+							<div className="flex gap-2">
+								<input type="checkbox" name="remember" value="true" onChange={(e) => setMailingList(e.target.checked)}/>
+								<p>Add to mailing list?</p>
 							</div>
 
 							<button type="submit" className="rounded-2xl p-2 bg-notes_secondary text-white hover:bg-notes_primary flex justify-center">{loading ? <Spinner /> : "Register"}</button>
