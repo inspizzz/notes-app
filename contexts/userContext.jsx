@@ -78,6 +78,18 @@ export const UserProvider = ({ children }) => {
         router.push("/")
     }, [])
 
+	const addMailingList = useCallback(async (email) => {
+		const result = await pb.collection("mailing_list").create({ email }).then(() => {
+			return true
+		}).catch((err) => {
+			console.log("mailing list errored")
+			console.log(err)
+			return false
+		})
+
+		return result
+	}, [])
+
 
 	/**
 	 * Refresh the session if the token is about to expire
@@ -103,7 +115,7 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-          value={{ register, login, logout, user, token, pb }}
+          value={{ register, login, logout, addMailingList, user, token, pb }}
         >
           {children}
         </UserContext.Provider>
