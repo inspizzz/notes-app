@@ -146,6 +146,9 @@ export default function SettingsPage() {
 					<div className="flex flex-col gap-2 shadow-lg">
 
 						<p className="text-xl text-center">Other Settings</p>
+
+						<p>display username publicly?</p>
+						<p>display email publicly?</p>
 					</div>
 
 				</div>
