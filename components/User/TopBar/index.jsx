@@ -8,6 +8,8 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { MdHome } from "react-icons/md";
 import { CgNotes } from "react-icons/cg";
+import { RxCross1 } from "react-icons/rx";
+
 
 
 import Link from "next/link";
@@ -28,7 +30,7 @@ export function TopBar() {
 
 	return (mounted && user) && (
 		
-		<div className="absolute top-0 right-0 flex flex-col gap-2 justify-end p-2">
+		<div className="absolute top-0 right-0 flex flex-col gap-2 justify-end p-4">
 			<div className="w-full flex justify-end">
 				<div className="w-12 h-12 rounded-full flex justify-center bg-notes_background hover:shadow cursor-pointer" onClick={() => {
 					setSelected(!selected)
@@ -37,7 +39,7 @@ export function TopBar() {
 						!selected ? (
 							<p className="self-center">WW</p>
 						) : (
-							<MdLogout className="self-center text-black" />
+							<RxCross1 className="self-center text-black" />
 						)
 					}
 					
