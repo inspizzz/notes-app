@@ -95,11 +95,11 @@ export default function SettingsPage() {
 
 
 					{/* User Settings */}
-					<div className="flex flex-col gap-2 shadow-lg">
+					<div className="flex flex-col gap-2 shadow-lg rounded-2xl">
 
 						<p className="text-xl text-center">User Settings</p>
 
-						<div className="flex gap-2 p-2">
+						<div className="flex gap-2 p-2 justify-center">
 							<div className="w-24 h-24 rounded-full bg-notes_background flex justify-center shadow aspect-square hover:bg-gray-200 hover:cursor-pointer" ref={ref} onClick={() => setUploading(true)}>
 								{
 									hovering ? (
@@ -143,7 +143,7 @@ export default function SettingsPage() {
 					</div>
 
 					{/* User Settings */}
-					<div className="flex flex-col gap-2 shadow-lg">
+					<div className="flex flex-col gap-2 shadow-lg rounded-2xl">
 
 						<p className="text-xl text-center">Other Settings</p>
 
