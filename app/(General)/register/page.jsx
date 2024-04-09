@@ -6,14 +6,27 @@ import { useRouter } from "next/navigation"
 import { Spinner } from "@/components/Global/Spinner"
 import { AlreadyLoggedIn } from "@/components/User/AlreadyLoggedIn"
 
+/**
+ * Register page
+ * 
+ * Student / Other
+ *  - if student provide university information
+ *  - if other provide job information
+ * 
+ * 
+ */
 export default function Register() {
 
 	const [ error, setError ] = useState([])
-	const [ email, setEmail ]	 = useState("")
+	const [ selectType, setSelectType ] = useState("student")
+
+	const [ university, setUniversity ] = useState("")
+	const [ course, setCourse ] = useState("")
+	const [ email, setEmail ] = useState("")
 	const [ password, setPassword ] = useState("")
 	const [ mailingList, setMailingList ] = useState(false)
-	const [ loading, setLoading ] = useState(false)
 
+	const [ loading, setLoading ] = useState(false)
 	const [ mounted, setMounted ] = useState(false)
 
 	const { register, user, addMailingList } = useUser()
@@ -39,7 +52,6 @@ export default function Register() {
 		return true
 	}
 		
-
 	const submit = async (e) => {
 		setLoading(true)
 		e.preventDefault()
@@ -48,7 +60,7 @@ export default function Register() {
 		if (!check(email, password)) return
 
 		// login the user
-		const result = await register(email, password)
+		const result = await register(email, password, university, course)
 
 		if (result) {
 
@@ -76,40 +88,115 @@ export default function Register() {
 	})
 
 	return mounted ? (
-		<div className="bg-my_bg_image h-full w-full">
+		<div className="bg-my_bg_image w-full h-full ">
 			{
 				!user ? (
 					<div className="flex flex-col justify-center w-full h-full">
-						<form className="self-center flex flex-col gap-3 px-4 py-8 bg-white rounded-xl opacity-95" onSubmit={submit}>
-
-							<h1 className="self-center font-extrabold text-2xl">Register</h1>
-
-							{
-								error.length > 0 && (
-									<div className="bg-red-500 text-white rounded-2xl p-2 flex flex-col">
-										{error.map((e, i) => <p key={i}>{e}</p>)}
+						{
+							selectType == "student" ? (
+								<div className="self-center flex bg-white rounded-xl opacity-95 p-1 justify-between w-1/3 h-1/2">
+									<div className="h-full w-1/4 hover:bg-notes_secondary rounded-l-2xl" onClick={() => setSelectType("business")}>
 									</div>
-								)
-							}
 
-							<div>
-								<p>your email</p>
-								<input className="rounded-2xl p-2 bg-white" type="email" placeholder="admin@admin.com" value={email} onChange={(e) => {check(e.target.value, password); setEmail(e.target.value)}} />
-							</div>
+									<form className="bg-gray-200 w-3/4 h-full p-2 rounded-e-2xl flex flex-col justify-between" onSubmit={submit}>
+										<div>
+											<h1 className="text-2xl font-extrabold">Student Registration</h1>
+
+											<p>Your University?</p>
+											<input type="text" className="p-2 rounded-2xl w-full" onChange={(e) => setUniversity(e.target.value)} />
+
+											<p>Your Course</p>
+											<input type="text" className="p-2 rounded-2xl w-full" onChange={(e) => setCourse(e.target.value)} />
+
+											<div className="flex gap-2 w-full">
+												<div className="w-1/2">
+													<p>Your uni email?</p>
+													<input type="email" className="p-2 rounded-2xl w-full" />
+												</div>
+
+												<div className="w-1/2">
+													<p>And Again?</p>
+													<input type="email" className="p-2 rounded-2xl w-full" onPaste={(e) => e.preventDefault()} 
+													onChange={(e) => setEmail(e.target.value)}/>
+												</div>
+											</div>
+
+
+											<div className="flex gap-2 w-full">
+												<div className="w-1/2">
+													<p>Your Password?</p>
+													<input type="password" className="p-2 rounded-2xl w-full" />
+												</div>
+
+												<div className="w-1/2">
+													<p>And Again?</p>
+													<input type="password" className="p-2 rounded-2xl w-full" onPaste={(e) => e.preventDefault()} 
+													onChange={(e) => setPassword(e.target.value)}/>
+												</div>
+											</div>
+										</div>
+										
+										<div>
+											<div className="flex gap-2">
+												<input type="checkbox" onChange={(e) => setMailingList(e.target.checked)}/>
+												<p>Register to newsletter</p>
+											</div>
+											
+											<button type="submit" className="w-full rounded-2xl bg-white hover:bg-notes_secondary py-4">Submit</button>
+										</div>
+										
+									</form>
 							
-							<div>
-								<p>your password</p>
-								<input className="rounded-2xl p-2 bg-white" type="password" placeholder="12345678" value={password} onChange={(e) => {check(email, e.target.value); setPassword(e.target.value)}} />
-							</div>
+								</div>
+							) : (
+								<div className="self-center flex bg-white rounded-xl opacity-95 p-1 justify-between w-1/3 h-1/2">
+									<form className="bg-gray-200 w-3/4 h-full p-2 rounded-l-2xl flex flex-col justify-between" onSubmit={submit}>
+										<div>
+											<h1 className="text-2xl font-extrabold">Regular Registration</h1>
+
+											<div className="flex gap-2 w-full">
+												<div className="w-1/2">
+													<p>Your Email?</p>
+													<input type="email" className="p-2 rounded-2xl w-full" />
+												</div>
+
+												<div className="w-1/2">
+													<p>And Again?</p>
+													<input type="email" className="p-2 rounded-2xl w-full" onPaste={(e) => e.preventDefault()} />
+												</div>
+											</div>
+
+
+											<div className="flex gap-2 w-full">
+												<div className="w-1/2">
+													<p>Your Password?</p>
+													<input type="password" className="p-2 rounded-2xl w-full" />
+												</div>
+
+												<div className="w-1/2">
+													<p>And Again?</p>
+													<input type="password" className="p-2 rounded-2xl w-full" onPaste={(e) => e.preventDefault()} />
+												</div>
+											</div>
+										</div>
+										
+										<div>
+											<div className="flex gap-2">
+												<input type="checkbox" />
+												<p>Register to newsletter</p>
+											</div>
+											
+											<button type="submit" className="w-full rounded-2xl bg-white hover:bg-notes_secondary py-4">Submit</button>
+										</div>
+									</form>
+
+									<div className="h-full w-1/4 hover:bg-notes_secondary rounded-e-2xl" onClick={() => setSelectType("student")}>
+									</div>
 							
-							<div className="flex gap-2">
-								<input type="checkbox" name="remember" value="true" onChange={(e) => setMailingList(e.target.checked)}/>
-								<p>Add to mailing list?</p>
-							</div>
-
-							<button type="submit" className="rounded-2xl p-2 bg-notes_secondary text-white hover:bg-notes_primary flex justify-center">{loading ? <Spinner /> : "Register"}</button>
-
-						</form>
+								</div>
+							)
+						}
+						
 					</div>
 				) : (
 					<AlreadyLoggedIn />
@@ -118,23 +205,14 @@ export default function Register() {
 		</div>
 	) : (
 		<div className="bg-my_bg_image flex flex-col justify-center w-full h-full">
-			<form className="self-center flex flex-col gap-3 px-4 py-8 bg-white rounded-xl opacity-95">
-
-				<h1 className="self-center font-extrabold text-2xl flex justify-center gap-2">Loading <Spinner className="self-center"/></h1>
-
-				<div>
-					<p>your email</p>
-					<Spinner className="self-center"/>
+			<div className="flex flex-col justify-center self-center bg-white rounded-2xl p-4">
+				<h1 className="self-center font-extrabold text-2xl">Loading ...</h1>
+				<div className="self-center">
+					<Spinner />
 				</div>
 				
-				<div>
-					<p>your password</p>
-					<Spinner className="self-center"/>
-				</div>
-
-				<button type="submit" className="rounded-2xl p-2 bg-gray-500 text-white hover:bg-gray-600 flex justify-center" disabled>{loading ? <Spinner /> : "Login"}</button>
-
-			</form>
+			</div>
+			
 		</div>
 	)
 }

@@ -38,8 +38,8 @@ export const UserProvider = ({ children }) => {
 	/**
 	 * Register a new user
 	 */
-    const register = useCallback(async (email, password) => {
-        const result =  await pb.collection("users").create({ email, password, passwordConfirm: password }).then(() => {
+    const register = useCallback(async (email, password, university="", course="") => {
+        const result =  await pb.collection("users").create({ email, password, passwordConfirm: password, university, course }).then(() => {
 			return true
 		}).catch((err) => {
 			console.log("registering errored")

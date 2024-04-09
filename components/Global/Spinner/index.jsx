@@ -1,9 +1,9 @@
 import { PiSpinnerLight } from "react-icons/pi";
 
-export function Spinner() {
+export function Spinner({size="32"}) {
 	return (
 		<div role="status">
-			<PiSpinnerLight className="animate-spin"/>
+			<PiSpinnerLight size={size} className="animate-spin"/>
 		</div>
 	)
 }
