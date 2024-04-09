@@ -90,7 +90,7 @@ export default function SettingsPage() {
 			</Popup>
 
 			<div className="h-full w-full flex justify-center">
-				<div className="self-center bg-notes_background p-2 rounded-2xl w-1/3 min-w-96">
+				<div className="self-center bg-notes_background p-2 rounded-2xl w-1/3 min-w-96 flex flex-col gap-4">
 					<p className="text-2xl text-center">Account Settings</p>
 
 
@@ -131,15 +131,8 @@ export default function SettingsPage() {
 							</div>
 
 							<button className="p-2 bg-slate-200 hover:bg-slate-300 rounded-full" onClick={() => setChangingUsername(true)}>Change Username</button>
+							<button className="p-2 bg-slate-200 hover:bg-slate-300 rounded-full" onClick={() => setChangingUsername(true)}>Change Password</button>
 						</div>
-
-
-						{/* delete account */}
-						<div className="flex flex-col gap-2 p-2">
-							<button className="p-2 bg-gray-300 hover:bg-gray-400 text-white rounded-full" onClick={logout}>Log out</button>
-							<button className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full">Delete Account</button>
-						</div>
-
 					</div>
 
 					{/* User Settings */}
@@ -149,6 +142,12 @@ export default function SettingsPage() {
 
 						<p>display username publicly?</p>
 						<p>display email publicly?</p>
+
+						{/* delete account */}
+						<div className="flex flex-col gap-2 p-2">
+							<button className="p-2 bg-gray-300 hover:bg-gray-400 text-white rounded-full" onClick={logout}>Log out</button>
+							<button className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full">Delete Account</button>
+						</div>
 					</div>
 
 				</div>

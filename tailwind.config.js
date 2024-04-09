@@ -8,7 +8,7 @@ module.exports = {
 	theme: {
 		extend: {
 			backgroundImage: {
-				'my_bg_image' : "url('../public/Background.jpg')",
+				'my_bg_image' : "url('../../public/Background.jpg')",
 			},
 			colors: {
 				notes_background: "#FAF3F2",
@@ -16,8 +16,10 @@ module.exports = {
 				notes_primary: "#FF3131",
 				notes_secondary: "#FF914D",
 				notes_accent: "#FFDE59",
-
-			}
+			},
+			transitionProperty: {
+                'width': 'width'
+            },
 		},
 	},
 	plugins: [
