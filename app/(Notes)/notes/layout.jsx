@@ -15,6 +15,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { LuFolderPlus } from "react-icons/lu";
 import { IoIosRefresh } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { FaRegSave } from "react-icons/fa";
 
 
 
@@ -66,6 +67,13 @@ export default function NotesLayout({ children }) {
 
 	const removeNote = async () => {
 		pb.collection("notes").delete(selectedNote.id)
+		await fetchNotes()
+	}
+
+	const saveNote = async () => {
+		pb.collection("notes").update(selectedNote.id, {
+			content: selectedNote.content
+		})
 		await fetchNotes()
 	}
 
@@ -126,9 +134,20 @@ export default function NotesLayout({ children }) {
 								<h1 className="text-3xl self-center">{selectedNote ? selectedNote.title : "Select something to edit"}</h1>
 							</div>
 							
-							<div className="h-full aspect-square flex justify-center" onClick={() => removeNote()}>
-								<MdDelete className="self-center w-full h-full bg-red-100 rounded-2xl hover:bg-red-200" />
-							</div>
+							{
+								selectedNote && (
+									<div className="flex gap-2">
+										<div className="h-full aspect-square flex justify-center" onClick={() => saveNote()}>
+											<FaRegSave className="p-1 self-center w-full h-full bg-green-100 rounded-2xl hover:bg-green-200" />
+										</div>
+
+										<div className="h-full aspect-square flex justify-center" onClick={() => removeNote()}>
+											<MdDelete className=" p-1self-center w-full h-full bg-red-100 rounded-2xl hover:bg-red-200" />
+										</div>
+									</div>
+								)
+							}
+							
 						</div>
 
 						
