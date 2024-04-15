@@ -11,28 +11,81 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { MdHome } from "react-icons/md";
 import { CgNotes } from "react-icons/cg";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { LuFolderPlus } from "react-icons/lu";
 
+import { useNotes } from "@/contexts/notesContext"
 
 export default function NotesLayout({ children }) {
 
 	const [ mounted, setMounted ] = useState(false)
+	
 
 	const { user, logout } = useUser()
+	const { loading, notes, setSelectedNote } = useNotes()
 
 	// for hovering over profile image
 	const [ref, hovering] = useHover();
 
 	useEffect(() => {
 		setMounted(true)
+		
 	}, [])
+
+	useEffect(() => {
+		console.log("notes")
+		console.log(notes)
+	}, [notes])
+
+	useEffect(() => {
+		console.log("loading")
+		console.log(loading)
+	}, [loading])
+
+	
+
+	const newNote = () => {
+		console.log("new note")
+	}
+
+	const newFolder = () => {
+		console.log("new folder")
+	}
 
 	return (user && mounted) ? (
 		<div className="bg-gray-200 p-4 h-full w-full flex flex-col justify-between gap-4">
 			<div className="flex h-full gap-4">
 				<div className="w-1/5 flex flex-col justify-between p-2 bg-notes_background rounded-2xl h-full min-w-64">
-					<div className="self-center">
+					<div className="self-center w-full">
 						<h1 className="self-center font-extrabold text-2xl">Your Notes</h1>
-						<p>load in the notes here as clickables ...</p>
+
+						<div className="flex justify-end gap-1">
+							<LuFolderPlus className="hover:bg-gray-300 hover:shadow-xl rounded-xl p-1 w-6 h-6" onClick={newFolder}/>
+							<IoMdAddCircleOutline className="hover:bg-gray-300 hover:shadow-xl rounded-xl p-1 w-6 h-6" onClick={newNote}/>
+						</div>
+
+						{
+							loading && (
+								<p>Loading...</p>
+							)
+						}
+
+						{
+							notes && (
+								<div className="flex flex-col gap-2">
+									{
+										notes.map((note, index) => {
+											console.log(note)
+											return (
+												<div key={index} className="w-full bg-gray-200 rounded-2xl p-2 flex" onClick={() => setSelectedNote(note)}>
+													<h1 className="text-xl self-center">{note.title}</h1>
+												</div>
+											)
+										})
+									}
+								</div>
+							)
+						}
 					</div>
 
 					<div className="flex flex-col">
@@ -40,8 +93,8 @@ export default function NotesLayout({ children }) {
 							<p className="self-center text-white">WW</p>
 						</Link>
 
-						<p className="self-center">Your Group Here</p>
-						<small className="self-center">email.email@email.com</small>
+						<p className="self-center">{user.university}</p>
+						<small className="self-center">{user.email}</small>
 					</div>
 				</div>
 
@@ -70,15 +123,11 @@ export default function NotesLayout({ children }) {
 								<p className="self-center text-black">WW</p>
 							</div>
 						</div>
-						
 					</div>
-					
-
 					
 					{children}
 					
 				</div>
-
 			</div>
 
 			{/* footer */}
@@ -86,6 +135,7 @@ export default function NotesLayout({ children }) {
 				<p>Legal | Contact | Something</p>
 			</div>
 		</div>
+		
 	) : (
 		<NotLoggedIn />
 	)

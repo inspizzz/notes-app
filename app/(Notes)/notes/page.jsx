@@ -1,4 +1,9 @@
+import { useNotes } from "@/contexts/notesContext"
+
 export default function NotePage() {
+
+	const { loading, notes, selectedNote } = useNotes()
+
 	return (
 		<div className="w-full h-full flex flex-col gap-4 justify-between">
 			<div className="w-full h-full bg-notes_background rounded-2xl flex">
@@ -14,7 +19,9 @@ export default function NotePage() {
 				</div>
 
 				<div className="w-full h-full p-2 flex flex-col">
-					
+					{
+						selectedNote.content
+					}
 				</div>
 			</div>
 		</div>

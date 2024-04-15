@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) => {
 	/**
 	 * Register a new user
 	 */
-    const register = useCallback(async (email, password, firstName, lastName, university="", course="") => {
+    const register = useCallback(async (email, password, university="", course="", firstName, lastName) => {
         const result =  await pb.collection("users").create({ email, password, passwordConfirm: password, university, course, firstname: firstName, lastname: lastName }).then(() => {
 			return true
 		}).catch((err) => {

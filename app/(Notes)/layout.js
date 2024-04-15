@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@/contexts/userContext";
+import { NotesProvider } from "@/contexts/notesContext";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -11,14 +12,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
 	return (
 		<html lang="en">
 			<head />
 			<body className="h-screen">
+			
 				<UserProvider>
-					<main className="h-screen w-screen">
-						{children}
-					</main>
+					<NotesProvider>
+						<main className="h-screen w-screen">
+							{children}
+						</main>
+					</NotesProvider>
 				</UserProvider>
 			</body>
 		</html>
