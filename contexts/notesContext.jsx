@@ -38,7 +38,7 @@ export const NotesProvider = ({ children }) => {
 
 
     return (
-		<NotesContext.Provider value={{ loading, notes, selectedNote, setSelectedNote }}>
+		<NotesContext.Provider value={{ loading, notes, selectedNote, setSelectedNote, fetchNotes }}>
 			{children}
         </NotesContext.Provider>
     )

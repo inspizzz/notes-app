@@ -1,3 +1,4 @@
+'use client'
 import { useNotes } from "@/contexts/notesContext"
 
 export default function NotePage() {
@@ -20,7 +21,9 @@ export default function NotePage() {
 
 				<div className="w-full h-full p-2 flex flex-col">
 					{
-						selectedNote.content
+						selectedNote && (
+							<p>{selectedNote.content}</p>
+						)
 					}
 				</div>
 			</div>
