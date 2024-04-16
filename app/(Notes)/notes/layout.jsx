@@ -66,12 +66,13 @@ export default function NotesLayout({ children }) {
 	}
 
 	const removeNote = async () => {
-		pb.collection("notes").delete(selectedNote.id)
+		await pb.collection("notes").delete(selectedNote.id)
 		await fetchNotes()
+		setSelectedNote(false)
 	}
 
 	const saveNote = async () => {
-		pb.collection("notes").update(selectedNote.id, {
+		await pb.collection("notes").update(selectedNote.id, {
 			content: selectedNote.content
 		})
 		await fetchNotes()

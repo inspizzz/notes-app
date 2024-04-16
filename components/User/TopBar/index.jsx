@@ -14,6 +14,8 @@ import { RxCross1 } from "react-icons/rx";
 
 import Link from "next/link";
 
+import { pb } from "@/utils/pocketbase"
+
 
 
 
@@ -22,11 +24,13 @@ export function TopBar() {
 	const [ mounted, setMounted ] = useState(false)
 	const [ selected, setSelected ] = useState(false)
 
-	const { user, logout } = useUser()
+	const { user, logout, imageUrl } = useUser()
 
 	useEffect(() => {
 		setMounted(true)
 	}, [])
+
+	
 
 	return (mounted && user) && (
 		
@@ -37,9 +41,12 @@ export function TopBar() {
 				}}>
 					{
 						!selected ? (
-							<p className="self-center">WW</p>
+							<img src={imageUrl} className="rounded-full w-11 h-11 self-center" onerror='this.remove()'/>
 						) : (
-							<RxCross1 className="self-center text-black" />
+							<div className="relative w-11 h-11 rounded-full self-center flex justify-center">
+								<img src={imageUrl} className="w-full h-full rounded-full absolute" onerror='this.remove()'/>
+								<RxCross1 className="text-black absolute w-3/4 h-3/4 self-center select-none" />
+							</div>
 						)
 					}
 					

@@ -17,7 +17,7 @@ export default function NotePage() {
 	}, [selectedNote])
 
 
-	return (
+	return selectedNote ? (
 		<div className="w-full h-full flex flex-col gap-4 justify-between">
 			<div className="w-full h-full bg-notes_background rounded-2xl flex">
 
@@ -45,6 +45,11 @@ export default function NotePage() {
 						)
 					}
 				</div>
+			</div>
+		</div>
+	) : (
+		<div className="w-full h-full flex flex-col gap-4 justify-between">
+			<div className="w-full h-full bg-notes_background rounded-2xl flex">
 			</div>
 		</div>
 	)

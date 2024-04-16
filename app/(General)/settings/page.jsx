@@ -11,6 +11,11 @@ import { Popup } from "@/components/Global/Popup";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useUser } from "@/contexts/userContext";
 
+import { useDropzone } from 'react-dropzone';
+
+// pocketbase
+import { pb } from "@/utils/pocketbase"
+
 
 export default function SettingsPage() {
 
@@ -18,59 +23,127 @@ export default function SettingsPage() {
 	const [ref, hovering] = useHover();
 
 	// for mounting the component
-	const [ mounted, setMounted ] = useState(false)
+	const [mounted, setMounted] = useState(false)
 
 	// for uploading images
-	const [ uploading, setUploading ] = useState(false)
-	const [ selectedImage, setSelectedImage ] = useState(null);
+	const [uploading, setUploading] = useState(false)
+	const [uploadHovering, setUploadHovering] = useState(false)
+	const [uploadedFiles, setUploadedFiles] = useState([]);
 
 	// for changing username
-	const [ changingUsername, setChangingUsername ] = useState(false)
-	const [ newUsername, setNewUsername ] = useState("")
+	const [changingUsername, setChangingUsername] = useState(false)
+	const [newUsername, setNewUsername] = useState("")
 
 	// the user data
-	const { user, logout } = useUser()
+	const { user, logout, refreshSession, getImage, imageUrl } = useUser()
+
+	// drop file data
+	const { getRootProps, getInputProps } = useDropzone({
+		onDragOver: () => {
+			console.log("over")
+			setUploadHovering(true)
+		},
+		onDragLeave: () => {
+			setUploadHovering(false)
+		},
+		onDrop: (acceptedFiles) => {
+			setUploadedFiles(acceptedFiles)
+			setUploadHovering(false)
+		},
+	})
 
 	useEffect(() => {
 		setMounted(true)
 	})
 
+	useEffect(() => {
+		console.log("image has changed")
+		console.log(imageUrl)
+	}, [imageUrl])
+
+	const upload = async () => {
+		console.log("uploading")
+		if (uploadedFiles.length == 0) return;
+
+		const formData = new FormData();
+		formData.append('avatar', uploadedFiles[0]);
+
+		await pb.collection("users").update(user.id, formData)
+
+		setUploadedFiles([])
+		setUploadHovering(false)
+		setUploading(false)
+
+		const sleep = ms => new Promise(r => setTimeout(r, ms));
+		await sleep(5000);
+
+		// update the user
+		await refreshSession()
+		getImage()
+	}
+
 	const updateUsername = (e) => {
 		e.preventDefault()
-		
+
+		if (newUsername == "") return;
 
 		// update the username
-
+		pb.collection("users").update(user.id, {
+			username: newUsername
+		})
 
 		// reset the state
 		setChangingUsername(false)
 		setNewUsername("")
+
+		refreshSession()
+	}
+
+	const deleteProfile = async () => {
+		await pb.collection("users").update(user.id, {
+			avatar: null
+		})
+
+		await refreshSession()
+		getImage()
 	}
 
 	return (user && mounted) && (
 		<div className="bg-my_bg_image h-full w-full">
 			{/* Image Upload */}
 			<Popup trigger={uploading} setTrigger={setUploading}>
-				<div className="bg-notes_background p-4 rounded-2xl">
-					<h1>Select a new profile image</h1>
+				<div className="bg-notes_background p-4 rounded-2xl flex flex-col gap-2">
+					<h1 className="text-2xl font-extrabold">Select a profile image</h1>
 
 					{
-						selectedImage && (
-							<div>
-								<img alt="not found" src={URL.createObjectURL(selectedImage)} />
-								<button onClick={() => setSelectedImage(null)}>Remove</button>
+						uploadedFiles.length == 0 && (
+							<div {...getRootProps()}>
+								<input {...getInputProps()} />
+								<p className={!uploadHovering ? "py-8 px-2 border border-black border-dashed rounded-2xl hover:bg-slate-200 flex justify-center" : "py-8 px-2 border border-black border-dashed rounded-2xl bg-slate-200 flex justify-center"}>Drag and drop files here or click to browse.</p>
 							</div>
 						)
 					}
+					
+					{
+						uploadedFiles.map((file) => (
+							<div key={file.name}>
+								<img src={URL.createObjectURL(file)} alt={file.name} />
+								<p>{file.name}</p>
+							</div>
+						))
+					}
 
-					<input
-						type="file"
-						name="myImage"
-						onChange={(event) => {
-							console.log(event.target.files[0]);
-							setSelectedImage(event.target.files[0]);
-						}}
-					/>
+					{
+						uploadedFiles && (
+							<div className="flex gap-2">
+								<button className="bg-red-200 px-4 py-2 rounded-2xl hover:bg-red-300 hover:shadow-lg" onClick={() => {
+									setUploadedFiles([])
+									setUploadHovering(false)
+								}}>Remove</button>
+								<button className="bg-green-200 px-4 py-2 rounded-2xl hover:bg-green-300 hover:shadow-lg" onClick={upload}>Upload</button>
+							</div>
+						)
+					}
 				</div>
 			</Popup>
 
@@ -78,7 +151,7 @@ export default function SettingsPage() {
 			<Popup trigger={changingUsername} setTrigger={setChangingUsername}>
 				<form className="bg-notes_background p-4 rounded-2xl flex flex-col gap-2" onSubmit={updateUsername}>
 					<h1>Change username</h1>
-					
+
 					<br />
 
 					<div className="flex flex-col gap-1">
@@ -105,14 +178,14 @@ export default function SettingsPage() {
 									hovering ? (
 										<IoCloudUploadOutline className="self-center" />
 									) : (
-										<p className="self-center">WW</p>
+										<img src={imageUrl} className="self-center rounded-full w-full h-full p-1" onerror='this.remove()'/>
 									)
 								}
 							</div>
 
 							<div className="p-2 flex flex-col gap-1">
 								<p className="rounded-full w-full bg-slate-200 px-4 py-1 flex justify-center hover:bg-slate-300" onClick={() => setUploading(true)}>upload new photo</p>
-								<p className="rounded-full w-full bg-slate-200 px-4 py-1 flex justify-center hover:bg-red-200">delete photo</p>
+								<p className="rounded-full w-full bg-slate-200 px-4 py-1 flex justify-center hover:bg-red-200" onClick={deleteProfile}>delete photo</p>
 							</div>
 						</div>
 
