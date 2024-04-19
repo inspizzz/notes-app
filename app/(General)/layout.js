@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
 
 					<TopBar />
 
-					<main className="h-screen w-screen">
+					<main className="h-screen">
 						{children}
 					</main>
 
