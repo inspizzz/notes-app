@@ -125,7 +125,7 @@ export default function NotesLayout({ children }) {
 
 					{
 						notes && (
-							<div className="flex flex-col gap-2 overflow-y-scroll">
+							<div className="flex flex-col gap-2 overflow-y-scroll scroll-none">
 								{
 									folders.map((folder, index) => {
 										return folder.notes.length > 1 ? (
